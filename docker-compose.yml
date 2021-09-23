@@ -1,0 +1,72 @@
+version: '2.9'
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - "3000:80"
+    volumes:
+      - ./docker/config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./app:/var/www/html/:z
+    depends_on:
+      - app
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    user: $UID
+    ports:
+      - "9000"
+    volumes:
+      - ./docker/config/php.ini:/usr/local/etc/php/php.ini
+      - ./app:/var/www/html/:z
+    depends_on:
+      - receiver
+      - composer
+
+  receiver:
+    build:
+      context: .
+      dockerfile: docker/receiver/Dockerfile
+    command: "php /app/receiver.php"
+    volumes:
+      - ./app:/app
+    depends_on:
+      composer:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    links:
+      - rabbitmq
+    scale: 5
+
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: docker/rabbitmq/Dockerfile
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+  composer:
+    user: $UID
+    build: docker/composer
+    volumes:
+      - ./app:/app
+    command: composer install
+    environment:
+      - HOME=/home/composer
+    working_dir: /app
+
+volumes:
+  rabbitmq-data:
