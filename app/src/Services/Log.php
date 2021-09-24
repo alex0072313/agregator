@@ -2,8 +2,13 @@
 
 namespace Src\Services;
 
-class Log
+abstract class Log
 {
+    /**
+     * Запись логов в базу
+     * @param string|null $message
+     * @param string $channel
+     */
     public static function save(string $message = null, string $channel = 'error') {
         $db = Db::getInstance()->getConnection();
 
