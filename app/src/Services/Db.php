@@ -44,6 +44,10 @@ class Db
         }
     }
 
+    public function __destruct() {
+        if($this->connection) $this->connection->close();
+    }
+
     // Предотвращаем дубликаты соединений
     private function __clone() { }
 
