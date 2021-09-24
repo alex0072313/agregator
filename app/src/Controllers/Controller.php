@@ -2,6 +2,7 @@
 
 namespace Src\Controllers;
 
+use Src\Services\Db;
 use Src\Views\View;
 
 abstract class Controller
@@ -12,10 +13,16 @@ abstract class Controller
     protected $view;
 
     /**
+     * @var \mysqli connection
+     */
+    protected $db;
+
+    /**
      * Создаем экземпляр шаблонизатора
      */
     public function __construct()
     {
-        $this->view = new View(__DIR__ . '/../Views/templates');
+        $this->view = new View(config('views')['template_dir']);
+        $this->db = Db::getInstance()->getConnection();
     }
 }

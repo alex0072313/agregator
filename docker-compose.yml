@@ -24,6 +24,7 @@ services:
       - ./docker/config/php.ini:/usr/local/etc/php/php.ini
       - ./app:/var/www/html/:z
     depends_on:
+      - db
       - receiver
       - composer
 
@@ -58,6 +59,20 @@ services:
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
 
+  db:
+    image: mariadb:latest
+    restart: always
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: agregator
+      MYSQL_ROOT_PASSWORD: 123456
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mariadb
+    volumes:
+      - dbdata:/var/lib/mysql/
+
   composer:
     user: $UID
     build: docker/composer
@@ -70,3 +85,6 @@ services:
 
 volumes:
   rabbitmq-data:
+    driver: local
+  dbdata:
+    driver: local

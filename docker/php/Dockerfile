@@ -2,14 +2,13 @@ FROM php:7.4-fpm
 
 COPY ./docker/config/php.ini /usr/local/etc/php/php.ini
 
-#RUN apt-get update && apt-get install -y  libcurl \
-#	&& docker-php-ext-install curl \
-#	&& apt-get clean \
-#    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+# Install dependencies
+RUN apt-get update
 
-#RUN apk update && apk add -f libcurl \
-#	&& docker-php-ext-install curl bcmath
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install bcmath
+# Install extensions
+RUN docker-php-ext-install mysqli pdo_mysql
 
 COPY ./app /var/www/html

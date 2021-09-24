@@ -9,5 +9,8 @@
 </head>
 <body>
     Hellow world!
+    <?php foreach ($test_results as $test_result): ?>
+        <p><?php echo $test_result['value'] ?></p>
+    <?php endforeach; ?>
 </body>
 </html>
