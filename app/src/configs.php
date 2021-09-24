@@ -7,6 +7,12 @@ return [
         'username' => 'root',
         'password' => 123456,
     ],
+    'queue' => [
+        'host' => 'rabbitmq',
+        'port' => 5672,
+        'user' => 'guest',
+        'password' => 'guest',
+    ],
     'views' => [
         'template_dir' => '/var/www/html/src/Views/templates'
     ],
