@@ -3,11 +3,12 @@
     "php-amqplib/php-amqplib": ">=2.6.1"
   },
   "autoload": {
+    "files": [
+      "src/helpers.php",
+      "src/routes.php"
+    ],
     "psr-4": {
       "Src\\": "src/"
-    },
-    "files": [
-      "src/routes.php"
-    ]
+    }
   }
 }
