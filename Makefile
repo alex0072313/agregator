@@ -14,6 +14,9 @@ bash:
 composer_bash:
 	export UID && docker-compose run --rm composer bash
 
+migrate:
+	docker-compose exec app sh -c 'php db_migrate.php;'
+
 push_jobs:
 	docker-compose exec app sh -c 'while true; do php send.php; done;'
 
