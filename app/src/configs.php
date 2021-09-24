@@ -9,5 +9,9 @@ return [
     ],
     'views' => [
         'template_dir' => '/var/www/html/src/Views/templates'
+    ],
+    'parser' => [
+        'url' => 'http://www.radio-liga.ru/yml.php',
+        'temp_file_path' => '/var/www/html/storage/catalog.xml'
     ]
 ];
